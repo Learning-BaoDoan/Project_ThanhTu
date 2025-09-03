@@ -1,0 +1,9 @@
+Xử lý chuỗi json bằng lib cJson hay chuỗi đều được:
+- Đọc data json từ file data.json
+- Phân tích ra name, address dưới dạng chuỗi.
+- Đánh số enum cho tuổi từ 18 -> 40 tương ứng 0 -> n.
+- Tạo struct cho info từng người: name max len 32, địa chỉ max len 256, tuổi.
+
+cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=../toolchain_win.cmake -B build .
+
+mingw32-make -C build -j20
