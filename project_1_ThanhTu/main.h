@@ -52,7 +52,9 @@ typedef struct{
 /**********************
  * GLOBAL PROTOTYPES
  **********************/
-char* read_json_file();
+char* read_json_file(const char* path_file);
+int parse_person_info(const char *json, s_person* p);
+// char 
 /**********************
  *      MACROS
  **********************/
