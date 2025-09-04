@@ -52,7 +52,7 @@ typedef struct{
 /**********************
  * GLOBAL PROTOTYPES
  **********************/
-
+char* read_json_file();
 /**********************
  *      MACROS
  **********************/
