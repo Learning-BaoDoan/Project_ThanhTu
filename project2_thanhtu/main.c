@@ -72,7 +72,7 @@ int main()
     if(read_file_bin(path, &header, &record)) 
     {
         printf("First record id=%u\n", record[0].sensor_id);
-        printf("bin=%d\n", record[0].baterry);
+        printf("temperature=%f\n", record[0].temp);
         free(record);
     }
     return 0;
