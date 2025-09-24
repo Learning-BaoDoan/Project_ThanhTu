@@ -56,8 +56,4 @@ dkms.conf
 
 # Build directories
 build/
-bin/
 .vscode/
-
-
-*.bin
