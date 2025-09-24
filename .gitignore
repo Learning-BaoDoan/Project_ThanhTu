@@ -58,3 +58,6 @@ dkms.conf
 build/
 bin/
 .vscode/
+
+
+*.bin
