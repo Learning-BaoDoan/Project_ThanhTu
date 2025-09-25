@@ -55,7 +55,8 @@ typedef struct
 /**********************
  *  STATIC VARIABLES
  **********************/
-// s_weatherRecord_t* read_file_bin(const char* path_file, s_header_t* header);
+int read_header(const char* path, s_header_t* header);
+int read_record(const char* path, s_header_t header, s_weatherRecord_t* record);
 /**********************
  *      MACROS
  **********************/
@@ -66,42 +67,59 @@ typedef struct
 int main()
 {
     s_header_t header;
-    printf("%d\n", sizeof(s_weatherRecord_t));
-    s_weatherRecord_t* record;
     char* path = "D:/Desktop/hoc/Tu/Training_lab/C/Project/project2_thanhtu/weather_data.bin";
-    if(read_file_bin(path, &header, &record)) 
+
+    if (!read_header(path, &header))
     {
-        printf("First record id=%u\n", record[0].sensor_id);
-        printf("temperature=%f\n", record[0].temp);
-        free(record);
+        return 0;
     }
+    s_weatherRecord_t* records = malloc(header.number_record * sizeof(s_weatherRecord_t));
+    if (!records) {
+        printf("Malloc failed\n");
+        return 0;
+    }
+
+    if (read_record(path, header, records)) {
+        printf("First record id=%u, battery=%u\n",
+               records[0].sensor_id, records[0].baterry);
+    }
+
+    free(records);
     return 0;
 }
 /**********************
  *   STATIC FUNCTIONS
 //  **********************/
-int read_file_bin(const char* path_file, s_header_t* header, s_weatherRecord_t** record)
+
+int read_header(const char* path, s_header_t* header)
 {
-    FILE* f = fopen(path_file, "rb");
+    FILE* f = fopen(path, "rb");
+
     if(f == NULL)
     {
-        printf("Can't not open file\n");
+        printf("Can not open file\n");
         fclose(f);
         return 0;
     }
     fread(header, sizeof(s_header_t), 1, f);
     printf("Header: id=%d, version=%d, record_count=%d\n",
            header->id_file, header->version, header->number_record);
-    
-    *record = (s_weatherRecord_t* )malloc(header->number_record * sizeof(s_weatherRecord_t));
+    fclose(f);
+    return 1;
+}
 
-    if(*record == NULL)
+int read_record(const char* path, s_header_t header, s_weatherRecord_t* record)
+{
+    FILE* f = fopen(path, "rb");
+
+    if(f == NULL)
     {
-        printf("Can't allocate memory");
+        printf("Can not open file\n");
         fclose(f);
         return 0;
     }
-    int n = fread(*record, sizeof(s_weatherRecord_t), header->number_record, f);
+    fseek(f, sizeof(s_header_t), SEEK_SET);
+    int n = fread(record, sizeof(s_weatherRecord_t), header.number_record, f);
     printf("Read %d records\n", n);
     fclose(f);
     return 1;
